@@ -1,0 +1,7 @@
+CREATE TABLE migrations
+(
+    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (name)
+);

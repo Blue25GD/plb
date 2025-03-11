@@ -1,0 +1,7 @@
+CREATE TABLE assessments
+(
+    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user_id    INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+)

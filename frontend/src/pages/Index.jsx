@@ -1,6 +1,8 @@
-import '../App.css'
+import '../app.css'
 import {config} from "../config.js";
 import {useNavigate} from "react-router";
+import interwind from "../assets/interwind.gif";
+import {useState} from "react";
 
 export function BackgroundHeader(props) {
     const {height} = props;
@@ -47,6 +49,8 @@ async function login() {
 function App() {
     let navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     async function createAssessmentAndStart() {
         const json = await fetchEndpoint("/assessments", "POST", {});
 
@@ -54,6 +58,7 @@ function App() {
     }
 
     async function startAssessment() {
+        setIsLoading(true);
         await login()
 
         await createAssessmentAndStart();
@@ -61,6 +66,17 @@ function App() {
 
     return (
         <>
+            {(isLoading) ? (
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                    width: "100%",
+                }}>
+                    <img src={interwind} alt="En cours de chargement..."/>
+                </div>
+            ) : (
             <BackgroundHeader height={"170px"} info={<>Préparer le BIA</>}>
                 <div style={{
                     padding: "24px"
@@ -74,6 +90,7 @@ function App() {
                     </button>
                 </div>
             </BackgroundHeader>
+            )}
         </>
     )
 }

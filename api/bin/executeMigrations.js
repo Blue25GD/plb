@@ -2,6 +2,13 @@ import {database} from "../db/database.js";
 import fs from "fs";
 import {beginTransaction, commitTransaction, executeTransaction, rollbackTransaction} from "../db/operations.js";
 
+const [tables] = await database.query("SHOW TABLES");
+if (!tables.find(table => table.Tables_in_db === "migrations")) {
+    const content = fs.readFileSync("db/initialSetup.sql", "utf-8");
+    await database.query(content);
+    console.log("Database setup completed");
+}
+
 const [alreadyExecutedMigrations] = await database.query("SELECT * FROM migrations");
 
 const allMigrations = fs.readdirSync("db/migrations");

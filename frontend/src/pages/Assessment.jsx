@@ -95,6 +95,7 @@ export function Assessment() {
     function submitAnswer() {
         let answer = document.querySelector('input[name="answer"]:checked')?.value;
         if (!answer) return setIsBadAnswerError(true);
+        setIsLoading(true);
         setIsBadAnswerError(false);
 
         fetchEndpoint(`/assessments/${assessmentId}`, "POST", {answer})
@@ -108,6 +109,7 @@ export function Assessment() {
     }
 
     function skipChallenge() {
+        setIsLoading(true);
         setIsBadAnswerError(false);
         fetchEndpoint(`/assessments/${assessmentId}`, "POST", {answer: "#ABAND#"})
             .then((r) => {

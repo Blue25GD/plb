@@ -21,14 +21,14 @@ export function BackgroundHeader(props) {
     </div>;
 }
 
-async function fetchEndpoint(endpoint, method, body = {}) {
+export async function fetchEndpoint(endpoint, method, body = {}) {
     const response = await fetch(config.api_url + endpoint, {
         method: method,
         headers: {
             "Content-Type": "application/json",
             "Authorization": localStorage.getItem("token")
         },
-        body: JSON.stringify(body)
+        body: method === "GET" ? null : JSON.stringify(body)
     })
 
     return await response.json();
@@ -61,7 +61,7 @@ function App() {
 
     return (
         <>
-            <BackgroundHeader height={"170px"} info={<>Preparer le BIA</>}>
+            <BackgroundHeader height={"170px"} info={<>Préparer le BIA</>}>
                 <div style={{
                     padding: "24px"
                 }}>

@@ -15,9 +15,9 @@ export async function authMiddleware(req, reply) {
 
     if (!token) return unauthorized(reply);
 
-    const [session] = await _validateSessionToken(token);
-
-    if (!session) return unauthorized(reply);
+    const sessionArray = await _validateSessionToken(token);
+    if (!sessionArray) return unauthorized(reply);
+    const [session] = sessionArray;
 
     const [user] = await _getUserFromSession(session);
     req.user = user;

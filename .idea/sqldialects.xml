@@ -4,6 +4,11 @@
     <file url="file://$PROJECT_DIR$/api/db/initialSetup.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/api/db/migrations/20250310_184745_create_users_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/api/db/migrations/20250310_193706_create_sessions_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/api/db/migrations/20250311_184359_create_assessments_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250311_184359_create_challenges_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250311_194821_create_assessments_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250311_195658_create_assessment_challenges_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250312_182241_create_competences_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250312_182403_update_challenges_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250312_182544_insert_competences.sql" dialect="MySQL" />
   </component>
 </project>

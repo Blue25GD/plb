@@ -1,0 +1,6 @@
+CREATE TABLE competences
+(
+    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name       TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

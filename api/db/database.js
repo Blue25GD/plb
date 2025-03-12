@@ -7,5 +7,7 @@ export const database = await mysql.createConnection({
     password: config.db.password,
     database: config.db.database,
     port: config.db.port,
-    multipleStatements: true
+    multipleStatements: true,
+    keepAliveInitialDelay: 300000,
+    enableKeepAlive: true
 })

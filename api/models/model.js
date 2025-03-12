@@ -10,6 +10,10 @@ export class Model {
     constructor(attributes) {
         this.attributes = attributes;
         this.constructor.table = this.constructor.table || this.constructor.name.toLowerCase() + 's';
+
+        if (attributes.id) {
+            this.id = attributes.id;
+        }
     }
 
     static async findBy(attribute, value) {

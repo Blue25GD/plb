@@ -7,7 +7,9 @@ export async function createServer() {
 
     fastify.register(routes);
 
-    await fastify.register(cors, {})
+    await fastify.register(cors, {
+        methods: ["GET", "POST", "PUT", "DELETE"],
+    })
 
     return fastify;
 }

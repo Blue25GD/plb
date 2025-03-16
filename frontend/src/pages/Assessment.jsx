@@ -8,7 +8,120 @@ async function getCurrentAssessment(id) {
     return await fetchEndpoint(`/assessments/${id}`, "GET");
 }
 
+function QuitPopup(props) {
+    const navigate = useNavigate();
+    return (
+        props.isOpen && (
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingTop: "40px",
+                paddingBottom: "40px",
+                position: "fixed",
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(37, 56, 88, .5)",
+                transition: "all .3s ease-in-out",
+                zIndex: "100",
+                overflowY: "scroll",
+            }}>
+                <div style={{
+                    width: "100%",
+                    height: "100%",
+                    position: "fixed",
+                    top: "0",
+                    left: "0",
+                    zIndex: "100",
+                }} onClick={() => {
+                    props.setIsOpen(false);
+                }}></div>
+
+                <div style={{
+                    backgroundColor: "#F4F5F7",
+                    width: "80%",
+                    maxWidth: "512px",
+                    overflowY: "auto",
+                    borderRadius: "6px",
+                    boxShadow: "0 6px 12px rgba(7, 20, 46, .08)",
+                    zIndex: "101",
+                }}>
+                    <div style={{
+                        padding: "24px",
+                        backgroundColor: "white",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}>
+                        <h3 style={{
+                            margin: "0",
+                        }}>Besoin d'une pause ?</h3>
+                        <button style={{
+                            border: "none",
+                            cursor: "pointer",
+                            fontSize: "24px",
+                            padding: "0",
+                            backgroundColor: "#F4F5F7",
+                            aspectRatio: "1 / 1",
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }} onClick={() => {
+                            props.setIsOpen(false);
+                        }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 24 24" style={{
+                                width: "18px",
+                                height: "18px",
+                                fill: "#253859",
+                            }}>
+                                <path
+                                    d="m12 13.591-4.804 4.805a1.08 1.08 0 0 1-.796.316A1.08 1.08 0 0 1 5.287 17.6q0-.479.317-.796L10.41 12 5.604 7.196a1.08 1.08 0 0 1-.317-.796A1.08 1.08 0 0 1 6.4 5.288q.479 0 .796.316L12 10.41l4.804-4.805a1.08 1.08 0 0 1 .796-.316A1.08 1.08 0 0 1 18.712 6.4q0 .479-.316.796L13.59 12l4.805 4.804q.316.318.316.796a1.08 1.08 0 0 1-1.112 1.112 1.08 1.08 0 0 1-.796-.316z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div style={{
+                        padding: "24px",
+                        color: "#253859",
+                    }}>
+                        Votre progression est enregistrée localement sur ce navigateur. Vous pourrez reprendre
+                        automatiquement plus tard.
+                    </div>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        padding: "0 24px 24px 24px",
+                        gap: "16px",
+                    }}>
+                        <button style={{
+                            backgroundColor: "#F4F5F7",
+                            borderColor: "rgb(69, 45, 157)",
+                            color: "rgb(69, 45, 157)",
+                        }} onClick={() => {
+                            props.setIsOpen(false);
+                        }}>
+                            Rester
+                        </button>
+                        <button onClick={() => {
+                            navigate("/");
+                        }}>
+                            Quitter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    )
+}
+
 function HeaderInfo({assessmentId, progress}) {
+    const [isQuitPopupOpen, setIsQuitPopupOpen] = useState(false);
+    const [savedCode, setSavedCode] = useState("Loading...");
+
     const renderInfo = (label, value, valueStyle) => (
         <div style={{display: "flex", flexDirection: "column", alignItems: "flex-end", fontSize: "18px"}}>
             <span style={{fontWeight: "400", opacity: label === "ÉPREUVE N°" ? "0.5" : "1"}}>{label}</span>
@@ -17,27 +130,63 @@ function HeaderInfo({assessmentId, progress}) {
     );
 
     return (
-        <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            height: "100%",
-            width: "100%",
-            paddingTop: "24px",
-            paddingBottom: "12px",
-        }}>
-            <div><span>Préparer le BIA</span></div>
+        <>
+            <QuitPopup isOpen={isQuitPopupOpen} setIsOpen={setIsQuitPopupOpen} savedCode={savedCode}/>
             <div style={{
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "space-between",
-                alignItems: "flex-end",
+                alignItems: "flex-start",
                 height: "100%",
+                width: "100%",
+                paddingTop: "24px",
+                paddingBottom: "12px",
             }}>
-                {renderInfo("ÉPREUVE N°", assessmentId, "24px")}
-                {renderInfo("QUESTION", `${progress.answeredChallenges}/${progress.totalChallenges}`, "32px")}
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    height: "100%",
+                }}>
+                    <span>Préparer le BIA</span>
+                    <button className="btn" style={{
+                        marginBottom: "12px",
+                        fontSize: "18px",
+                        appearance: "none",
+                        border: "none",
+                        backgroundColor: "transparent",
+                        color: "white",
+                        cursor: "pointer",
+                        fontFamily: "roboto",
+                        display: "flex",
+                        gap: "8px",
+                        alignItems: "center"
+                    }} onClick={async () => {
+                        setIsQuitPopupOpen(true);
+                    }}>
+                        <span>Quitter</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="logout" viewBox="0 0 24 25" style={{
+                            width: "24px",
+                            height: "24px",
+                            fill: "white"
+                        }}>
+                            <path
+                                d="M5.072 21.73a2.2 2.2 0 0 1-1.61-.665 2.2 2.2 0 0 1-.665-1.61V5.6q0-.944.665-1.61.665-.665 1.61-.665h5.838q.48 0 .809.33t.329.808-.33.808q-.328.33-.808.33H5.072v13.856h5.838q.48 0 .809.329.329.33.329.808 0 .48-.33.808-.328.33-.808.33H5.072Zm11.792-8.065H10.09q-.48 0-.809-.33a1.1 1.1 0 0 1-.329-.808q0-.478.33-.808.328-.33.808-.329h6.774l-1.737-1.738a1.06 1.06 0 0 1-.317-.776q0-.46.317-.796.316-.342.792-.351.476-.01.818.332l3.67 3.67a1.1 1.1 0 0 1 .337.796 1.1 1.1 0 0 1-.337.796l-3.67 3.67a1.06 1.06 0 0 1-.805.333 1.12 1.12 0 0 1-.805-.351 1.1 1.1 0 0 1-.308-.806 1.1 1.1 0 0 1 .327-.786z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    height: "100%",
+                }}>
+                    {renderInfo("ÉPREUVE N°", assessmentId, "24px")}
+                    {renderInfo("QUESTION", `${progress.answeredChallenges}/${progress.totalChallenges}`, "32px")}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

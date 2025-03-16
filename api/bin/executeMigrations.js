@@ -3,7 +3,7 @@ import fs from "fs";
 import {beginTransaction, commitTransaction, executeTransaction, rollbackTransaction} from "../db/operations.js";
 
 const [tables] = await database.query("SHOW TABLES");
-if (!tables.find(table => table.Tables_in_db === "migrations")) {
+if (!tables.find(table => table[Object.keys(table)[0]] === "migrations")) {
     const content = fs.readFileSync("db/initialSetup.sql", "utf-8");
     await database.query(content);
     console.log("Database setup completed");

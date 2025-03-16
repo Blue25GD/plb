@@ -1,42 +1,52 @@
 import {Assessment} from "../models/assessment.js";
 import {missingParams} from "../services/responses.js";
 
+const getAssessmentById = async (req, reply) => {
+    const {assessmentId} = req.params;
+    if (!assessmentId) return missingParams(reply, {assessmentId});
+
+    const [assessment] = await Assessment.findBy("id", assessmentId);
+    if (!assessment) {
+        return reply.status(404).send({message: "Assessment not found"});
+    }
+
+    if (assessment.attributes.user_id !== req.user.attributes.id) {
+        return reply.status(403).send({message: "Unauthorized"});
+    }
+
+    return assessment;
+};
+
 export const createAssessment = async (req, reply) => {
+    await Assessment.deleteOldAssessments();
+
     const assessment = new Assessment({
         user_id: req.user.attributes.id
     });
     await assessment.save();
 
-    const numberOfChallenges = 100;
-    // const numberOfChallenges = 5;
+    const numberOfChallenges = 100; // TODO: Consider making this configurable
     let challenges = [];
     for (let i = 0; i < numberOfChallenges; i++) {
         const challenge = await assessment.addRandomChallenge();
         if (challenge instanceof Error) {
             console.log(challenge.message);
-            break
+            break;
         }
         challenges.push(challenge);
     }
 
-    assessment.attributes.current_challenge_id = challenges[0].attributes.challenge_id;
+    assessment.attributes.current_challenge_id = challenges[0]?.attributes.challenge_id;
     await assessment.save();
 
-    return reply.send({
-        id: assessment.id
-    });
-}
+    return reply.send({id: assessment.id});
+};
 
 export const getAssessment = async (req, reply) => {
-    const assessmentId = parseInt(req.params.assessmentId);
-    const [assessment] = await Assessment.findBy("id", assessmentId);
+    const assessment = await getAssessmentById(req, reply);
+    if (!assessment) return;
 
-    if (!assessment) {
-        return reply.status(404).send({message: "Assessment not found"});
-    }
-
-    const [currentChallenge] = (await assessment.getCurrentChallenge()) ?? [];
-
+    const [currentChallenge] = await assessment.getCurrentChallenge() ?? [];
     if (!currentChallenge) {
         return reply.status(404).send({message: "No current challenge found"});
     }
@@ -51,23 +61,16 @@ export const getAssessment = async (req, reply) => {
             proposals: currentChallenge.attributes.proposals,
             image_url: currentChallenge.attributes.image_url,
         },
-        progress: progress
+        progress
     });
-}
+};
 
 export const submitAnswer = async (req, reply) => {
-    const assessmentId = parseInt(req.params.assessmentId);
-    const [assessment] = await Assessment.findBy("id", assessmentId);
+    const assessment = await getAssessmentById(req, reply);
+    if (!assessment) return;
 
-    if (!assessment) {
-        return reply.status(404).send({message: "Assessment not found"});
-    }
-
-    const answer = req.body.answer
-
-    if (!answer) {
-        return missingParams(reply, {answer});
-    }
+    const {answer} = req.body;
+    if (!answer) return missingParams(reply, {answer});
 
     const nextChallenge = await assessment.submitAnswer(answer);
 
@@ -77,10 +80,6 @@ export const submitAnswer = async (req, reply) => {
 
     if (nextChallenge instanceof Error) {
         return reply.status(400).send({message: nextChallenge.message});
-    }
-
-    if (!nextChallenge.attributes) {
-        return reply.status(404).send({message: "No next challenge found"});
     }
 
     const progress = await assessment.getProgress();
@@ -94,22 +93,40 @@ export const submitAnswer = async (req, reply) => {
             proposals: nextChallenge.attributes.proposals,
             image_url: nextChallenge.attributes.image_url,
         },
-        progress: progress
+        progress
     });
-}
+};
 
 export const getResults = async (req, reply) => {
-    const assessmentId = parseInt(req.params.assessmentId);
-    const [assessment] = await Assessment.findBy("id", assessmentId);
-
-    if (!assessment) {
-        return reply.status(404).send({message: "Assessment not found"});
-    }
+    const assessment = await getAssessmentById(req, reply);
+    if (!assessment) return;
 
     const results = await assessment.getProgress();
 
     return reply.send({
         id: assessment.id,
-        results: results
+        results
+    });
+};
+
+export const getAssessments = async (req, reply) => {
+    const assessments = await Assessment.findBy("user_id", req.user.attributes.id);
+
+    if (!assessments) {
+        return reply.send({results: []});
+    }
+
+    const results = await Promise.all(assessments.map(async assessment => {
+        const progress = await assessment.getProgress(false);
+        return {
+            id: assessment.id,
+            date: assessment.attributes.created_at,
+            type: "exam",
+            progress
+        };
+    }));
+
+    return reply.send({
+        results
     });
 }

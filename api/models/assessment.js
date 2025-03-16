@@ -1,6 +1,8 @@
 import {Model} from "./model.js";
 import {Challenge} from "./challenge.js";
 import {AssessmentChallenge} from "./assessmentChallenge.js";
+import {config} from "../config/environment.js";
+import {database} from "../db/database.js";
 
 export class Assessment extends Model {
     static table = 'assessments';
@@ -64,11 +66,25 @@ export class Assessment extends Model {
      *     answeredChallenges: number
      * }>} aka
      */
-    async getProgress() {
+    async getProgress(withChallenges = true) {
         const joinChallenges = await AssessmentChallenge.findBy('assessment_id', this.id)
+        if (!joinChallenges || !joinChallenges.length) {
+            return {
+                totalChallenges: 0,
+                answeredChallenges: 0,
+                correctChallenges: 0
+            }
+        }
         const totalChallenges = joinChallenges.length
         const answeredChallenges = joinChallenges.filter(joinChallenge => joinChallenge.attributes.is_answered).length
         const correctChallenges = joinChallenges.filter(joinChallenge => joinChallenge.attributes.is_correct).length
+        if (!withChallenges) {
+            return {
+                totalChallenges,
+                answeredChallenges,
+                correctChallenges
+            }
+        }
         let incorrectChallenges = joinChallenges.filter(joinChallenge => !joinChallenge.attributes.is_correct)
         incorrectChallenges = await Promise.all(
             incorrectChallenges.map(async joinChallenge => {
@@ -78,6 +94,7 @@ export class Assessment extends Model {
                     question: challenge.attributes.question,
                     proposals: challenge.attributes.proposals,
                     solution: challenge.attributes.solution,
+                    image_url: challenge.attributes.image_url
                 }
             })
         )
@@ -88,5 +105,46 @@ export class Assessment extends Model {
             correctChallenges,
             incorrectChallenges
         }
+    }
+
+    static async deleteOldAssessments() {
+        const assessmentIds = await database.query(`SELECT id
+                                                    FROM ${this.table}
+                                                    WHERE created_at < NOW() - INTERVAL ? SECOND`, [config.unsavedAssessmentTimeout])
+        if (!assessmentIds[0].length) {
+            return
+        }
+        await database.query(`DELETE
+                              FROM ${AssessmentChallenge.table}
+                              WHERE assessment_id IN (?)`, [assessmentIds[0].map(assessment => assessment.id)])
+        await database.query(`DELETE
+                              FROM ${this.table}
+                              WHERE id IN (?)`, [assessmentIds[0].map(assessment => assessment.id)])
+    }
+
+    async saveAndReturnCode() {
+        if (this.attributes.save_code) {
+            await database.query(
+                `UPDATE ${this.constructor.table}
+                 SET saved_at = CURRENT_TIMESTAMP
+                 WHERE id = ?`,
+                [this.id]
+            );
+            return this.attributes.save_code;
+        }
+
+        const code = Math.random()
+            .toString(36)
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, '')
+            .slice(0, 8);
+        await database.query(
+            `UPDATE ${this.constructor.table}
+             SET save_code = ?,
+                 saved_at  = CURRENT_TIMESTAMP
+             WHERE id = ?`,
+            [code, this.id]
+        );
+        return code;
     }
 }

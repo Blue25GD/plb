@@ -290,8 +290,8 @@ export function Assessment() {
                         padding: "16px",
                         whiteSpace: "pre-line",
                         wordWrap: "break-word"
-                    }}>
-                        {question}
+                    }} dangerouslySetInnerHTML={{__html: question}}>
+
                     </div>
 
                     {imageUrl && (
@@ -301,11 +301,15 @@ export function Assessment() {
                             width: "100%",
                             marginBottom: "16px"
                         }}>
-                            <img src={`/images/${imageUrl}`} alt="" style={{
-                                maxWidth: "100%",
-                                borderRadius: "8px",
-                                marginBottom: "8px"
-                            }}/>
+                            {imageUrl.startsWith("<img") ? (
+                                <div dangerouslySetInnerHTML={{__html: imageUrl}}/>
+                            ) : (
+                                <img src={`/images/${imageUrl}`} alt="" style={{
+                                    maxWidth: "100%",
+                                    borderRadius: "8px",
+                                    marginBottom: "8px"
+                                }}/>
+                            )}
                         </div>
                     )}
 
@@ -340,7 +344,7 @@ export function Assessment() {
                                         value={option.value}
                                         style={{width: "16px", height: "16px", margin: "0"}}
                                     />
-                                    <span>{option.label}</span>
+                                    <span dangerouslySetInnerHTML={{__html: option.label}}></span>
                                 </label>
                             ))}
                         </div>

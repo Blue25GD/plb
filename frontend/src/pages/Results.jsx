@@ -98,8 +98,7 @@ export function QuestionPreviewPopup(props) {
                         backgroundColor: "white",
                         borderRadius: "8px",
                         boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
-                    }}>
-                        {challenge.question}
+                    }} dangerouslySetInnerHTML={{__html: challenge.question}}>
                     </div>
                     {challenge.image_url && (
                         <div style={{
@@ -108,9 +107,15 @@ export function QuestionPreviewPopup(props) {
                             borderRadius: "8px",
                             boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
                         }}>
-                            <img src={`/images/${challenge.image_url}`} alt="Question" style={{
-                                maxWidth: "100%",
-                            }}/>
+                            {challenge.image_url.startsWith("<img") ? (
+                                <div dangerouslySetInnerHTML={{__html: challenge.image_url}}/>
+                            ) : (
+                                <img src={`/images/${challenge.image_url}`} alt="" style={{
+                                    maxWidth: "100%",
+                                    borderRadius: "8px",
+                                    marginBottom: "8px"
+                                }}/>
+                            )}
                         </div>
                     )}
 
@@ -134,7 +139,7 @@ export function QuestionPreviewPopup(props) {
                                 }} disabled checked={parseInt(challenge.solution) === index + 1}/>
                                 <label style={{
                                     marginLeft: "8px",
-                                }} htmlFor={index}>{proposal}</label>
+                                }} htmlFor={index} dangerouslySetInnerHTML={{__html: proposal}}></label>
                             </div>
                         ))}
                     </div>

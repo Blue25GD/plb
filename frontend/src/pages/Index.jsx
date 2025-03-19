@@ -34,6 +34,11 @@ export async function fetchEndpoint(endpoint, method, body = {}) {
         body: method === "GET" ? null : JSON.stringify(body)
     })
 
+    if (response.status === 401) {
+        localStorage.removeItem("token")
+        window.location.reload()
+    }
+
     return await response.json();
 }
 

@@ -1,4 +1,4 @@
-cp .env.example .env
+cp example.env .env
 sed -i 's/changeme/$(openssl rand -base64 32 | tr -d /=+ | cut -c -32)/g' .env
 docker compose up -d
 cd api && npm install && cd ..

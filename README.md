@@ -22,7 +22,7 @@ Application web pour préparer le Brevet d'Initiation à l'Aéronautique (BIA) a
   <img src="https://github.com/Blue25GD/plb/blob/main/screenshots/3.png" alt="Screenshot 3" width="400"/>
 </p>
 
-## �� Démarrage Rapide
+## 🚀 Démarrage Rapide
 
 ### Méthode 1 : Script de déploiement automatisé (recommandé)
 

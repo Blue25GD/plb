@@ -35,3 +35,15 @@ for (const migration of migrationsToExecute) {
 }
 
 console.log("All migrations executed");
+
+// Close the database connection properly to allow the process to exit
+try {
+    await database.end();
+    console.log("Database connection closed");
+} catch (error) {
+    console.error("Error closing database connection:", error);
+    process.exit(1); // Exit with error code
+}
+
+// Explicitly exit the process to ensure it doesn't hang
+process.exit(0);

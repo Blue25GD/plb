@@ -10,16 +10,67 @@ Avant de commencer, assurez-vous d'avoir installé :
 - [Docker](https://www.docker.com/) et [Docker Compose](https://docs.docker.com/compose/)
 - [Git](https://git-scm.com/)
 
-## Étapes d'installation
+## Méthodes d'Installation
 
-### 1. Cloner le dépôt
+Vous pouvez installer le projet de deux façons : en utilisant le script de déploiement automatisé (recommandé) ou en suivant les étapes manuelles.
+
+### Méthode 1 : Script de déploiement automatisé (recommandé)
+
+Le projet dispose d'un script de déploiement (`deploy.sh`) qui automatise tout le processus d'installation :
+
+```bash
+# Cloner le dépôt
+git clone https://github.com/Blue25GD/plb.git
+cd plb
+
+# Rendre le script exécutable
+chmod +x deploy.sh
+
+# Lancer le script de déploiement
+./deploy.sh
+```
+
+Le script effectue automatiquement les opérations suivantes :
+- Vérification des prérequis
+- Configuration du fichier d'environnement
+- Démarrage de la base de données Docker
+- Installation des dépendances
+- Construction du frontend
+- Initialisation de la base de données
+- Démarrage de l'API avec PM2
+
+#### Options du script de déploiement
+
+Le script offre plusieurs options pour personnaliser l'installation :
+
+```bash
+# Afficher l'aide
+./deploy.sh --help
+
+# Types de déploiement
+./deploy.sh --type full            # Installation complète (par défaut)
+./deploy.sh --type frontend-only   # Uniquement le frontend
+./deploy.sh --type backend-only    # Uniquement le backend et la base de données
+./deploy.sh --type db-only         # Uniquement la base de données
+
+# Autres options
+./deploy.sh --backup               # Créer une sauvegarde avant le déploiement
+./deploy.sh --skip-deps            # Ignorer l'installation des dépendances
+./deploy.sh --env fichier.env      # Utiliser un fichier d'environnement spécifique
+```
+
+### Méthode 2 : Installation manuelle
+
+Si vous préférez installer manuellement ou si vous avez besoin de plus de contrôle sur le processus d'installation, suivez ces étapes :
+
+#### 1. Cloner le dépôt
 
 ```bash
 git clone https://github.com/Blue25GD/plb.git
 cd plb
 ```
 
-### 2. Configuration de l'environnement
+#### 2. Configuration de l'environnement
 
 Créez un fichier `.env` en copiant le fichier exemple :
 
@@ -36,7 +87,7 @@ DB_PASSWORD=plb
 DB_NAME=plb
 ```
 
-### 3. Démarrer la base de données
+#### 3. Démarrer la base de données
 
 ```bash
 docker-compose up -d
@@ -44,9 +95,9 @@ docker-compose up -d
 
 Cette commande lance un conteneur Docker avec une base de données SQL.
 
-### 4. Installer les dépendances
+#### 4. Installer les dépendances
 
-#### Backend (API)
+**Backend (API)**
 
 ```bash
 cd api
@@ -54,7 +105,7 @@ npm install
 cd ..
 ```
 
-#### Frontend
+**Frontend**
 
 ```bash
 cd frontend
@@ -62,7 +113,7 @@ npm install
 cd ..
 ```
 
-### 5. Configurer le frontend
+#### 5. Configurer le frontend
 
 Modifiez le fichier `frontend/src/config.js` pour pointer vers votre API locale :
 
@@ -74,7 +125,7 @@ const config = {
 export {config};
 ```
 
-### 6. Initialiser la base de données
+#### 6. Initialiser la base de données
 
 ```bash
 cd api
@@ -84,16 +135,16 @@ cd ..
 
 Cette commande crée les tables nécessaires et ajoute les données initiales à la base de données.
 
-### 7. Lancer l'application
+#### 7. Lancer l'application
 
-#### Démarrer l'API (dans un terminal)
+**Démarrer l'API (dans un terminal)**
 
 ```bash
 cd api
 npm start
 ```
 
-#### Démarrer le frontend (dans un autre terminal)
+**Démarrer le frontend (dans un autre terminal)**
 
 ```bash
 cd frontend

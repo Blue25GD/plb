@@ -22,9 +22,39 @@ Application web pour préparer le Brevet d'Initiation à l'Aéronautique (BIA) a
   <img src="https://github.com/Blue25GD/plb/blob/main/screenshots/3.png" alt="Screenshot 3" width="400"/>
 </p>
 
-## 🚀 Démarrage Rapide
+## �� Démarrage Rapide
 
-Pour lancer le projet localement, suivez ces étapes:
+### Méthode 1 : Script de déploiement automatisé (recommandé)
+
+Le projet dispose d'un script de déploiement qui automatise toute l'installation :
+
+```bash
+# Cloner le dépôt
+git clone https://github.com/Blue25GD/plb.git
+cd plb
+
+# Rendre le script exécutable
+chmod +x deploy.sh
+
+# Lancer le script de déploiement (installation complète)
+./deploy.sh
+```
+
+Vous pouvez personnaliser le déploiement avec différentes options :
+```bash
+# Voir toutes les options disponibles
+./deploy.sh --help
+
+# Déployer uniquement le frontend
+./deploy.sh --type frontend-only
+
+# Créer une sauvegarde avant le déploiement
+./deploy.sh --backup
+```
+
+### Méthode 2 : Installation manuelle
+
+Pour une installation manuelle, suivez ces étapes :
 
 ```bash
 # Cloner le dépôt
@@ -79,7 +109,7 @@ R: Oui, ce projet est et restera gratuit, sans publicités.
 
 ## 🚢 Déploiement
 
-Pour déployer l'application en production, consultez le guide détaillé dans [DEPLOY.md](https://github.com/Blue25GD/plb/blob/main/DEPLOY.md).
+Pour déployer l'application en production, consultez le guide détaillé dans [DEPLOY.md](https://github.com/Blue25GD/plb/blob/main/DEPLOY.md) ou dans le [guide de déploiement](./docs/deployment.md).
 
 ## 📞 Support et Feedback
 

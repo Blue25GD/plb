@@ -5,7 +5,12 @@ const getAssessmentById = async (req, reply) => {
     const {assessmentId} = req.params;
     if (!assessmentId) return missingParams(reply, {assessmentId});
 
-    const [assessment] = await Assessment.findBy("id", assessmentId);
+    const assessments = await Assessment.findBy("id", assessmentId);
+    if (!assessments) {
+        return reply.status(404).send({message: "Assessment not found"});
+    }
+
+    const assessment = assessments[0];
     if (!assessment) {
         return reply.status(404).send({message: "Assessment not found"});
     }
@@ -20,14 +25,16 @@ const getAssessmentById = async (req, reply) => {
 export const createAssessment = async (req, reply) => {
     await Assessment.deleteOldAssessments();
 
+    const {numberOfQuestions = 10, categories = []} = req.body;
+
     const assessment = new Assessment({
-        user_id: req.user.attributes.id
+        user_id: req.user.attributes.id,
+        competences: categories // Map frontend categories to backend competences
     });
     await assessment.save();
 
-    const numberOfChallenges = 10; // TODO: Consider making this configurable
     let challenges = [];
-    for (let i = 0; i < numberOfChallenges; i++) {
+    for (let i = 0; i < numberOfQuestions; i++) {
         const challenge = await assessment.addRandomChallenge();
         if (challenge instanceof Error) {
             console.log(challenge.message);
@@ -130,3 +137,11 @@ export const getAssessments = async (req, reply) => {
         results
     });
 }
+
+export const deleteAssessment = async (req, reply) => {
+    const assessment = await getAssessmentById(req, reply);
+    if (!assessment) return;
+
+    await assessment.delete();
+    return reply.send({success: true});
+};

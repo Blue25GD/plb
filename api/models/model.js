@@ -18,9 +18,9 @@ export class Model {
 
     static async findBy(attribute, value) {
         const query = `SELECT *
-                       FROM ${this.table}
-                       WHERE ${attribute} = ?`;
-        const [rows] = await database.query(query, [value]);
+                       FROM ? ?
+                       WHERE ?? = ?`;
+        const [rows] = await database.query(query, [this.table, attribute, value]);
         return rows.length ? rows.map(row => new this(row)) : null;
     }
 
@@ -43,26 +43,31 @@ export class Model {
     }
 
     async _insert() {
-        const columns = Object.keys(this.attributes).join(', ');
+        const columns = Object.keys(this.attributes);
         const values = Object.values(this.attributes);
         const placeholders = values.map(() => '?').join(', ');
 
-        const query = `INSERT INTO ${this.constructor.table} (${columns})
-                       VALUES (${placeholders})`;
-        await executeTransaction(query, values);
+        const query = `INSERT INTO ?? (??) VALUES (${placeholders})`;
+        await executeTransaction(query, [this.constructor.table, columns, ...values]);
 
         const [[{id}]] = await database.query(`SELECT LAST_INSERT_ID() AS id`);
         this.id = id;
     }
 
     async _update() {
-        const columns = Object.keys(this.attributes).map(col => `${col} = ?`).join(', ');
+        const columns = Object.keys(this.attributes);
         const values = Object.values(this.attributes);
+        const setClause = columns.map(col => `?? = ?`).join(', ');
 
-        const query = `UPDATE ${this.constructor.table}
-                       SET ${columns}
-                       WHERE id = ?`;
-        await executeTransaction(query, [...values, this.id]);
+        const query = `UPDATE ?? SET ${setClause} WHERE id = ?`;
+        const params = [];
+        params.push(this.constructor.table);
+        columns.forEach((col, index) => {
+            params.push(col, values[index]);
+        });
+        params.push(this.id);
+
+        await executeTransaction(query, params);
     }
 
     async _delete() {

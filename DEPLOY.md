@@ -33,7 +33,8 @@ This will:
 1. Start Docker services
 2. Install all dependencies (root, API, and frontend)
 3. Set up the development environment
-4. Start both the API and frontend in development mode
+4. Run database migrations
+5. Start both the API and frontend in development mode
 
 ## Production Deployment
 
@@ -89,8 +90,7 @@ cd frontend && npm run build && cd ..
 5. Setup the database
 
 ```bash
-cd api
-node bin/executeMigrations.js
+cd api && npm run migrate && cd ..
 ```
 
 5. Start the server (using pm2)

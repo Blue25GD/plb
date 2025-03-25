@@ -3,6 +3,8 @@ import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import interwind from "../assets/interwind.gif";
 import {useNavigate} from "react-router";
+import {Modal} from '../components/Modal';
+import {LoadingSpinner} from '../components/LoadingSpinner';
 
 async function getCurrentAssessment(id) {
     return await fetchEndpoint(`/assessments/${id}`, "GET");
@@ -11,111 +13,73 @@ async function getCurrentAssessment(id) {
 function QuitPopup(props) {
     const navigate = useNavigate();
     return (
-        props.isOpen && (
+        <Modal isOpen={props.isOpen} onClose={() => props.setIsOpen(false)}>
             <div style={{
+                padding: "24px",
+                backgroundColor: "white",
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
-                paddingTop: "40px",
-                paddingBottom: "40px",
-                position: "fixed",
-                top: "0",
-                left: "0",
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(37, 56, 88, .5)",
-                transition: "all .3s ease-in-out",
-                zIndex: "100",
-                overflowY: "scroll",
             }}>
-                <div style={{
-                    width: "100%",
-                    height: "100%",
-                    position: "fixed",
-                    top: "0",
-                    left: "0",
-                    zIndex: "100",
+                <h3 style={{
+                    margin: "0",
+                }}>Besoin d'une pause ?</h3>
+                <button style={{
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "24px",
+                    padding: "0",
+                    backgroundColor: "#F4F5F7",
+                    aspectRatio: "1 / 1",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                 }} onClick={() => {
                     props.setIsOpen(false);
-                }}></div>
-
-                <div style={{
-                    backgroundColor: "#F4F5F7",
-                    width: "80%",
-                    maxWidth: "512px",
-                    overflowY: "auto",
-                    borderRadius: "6px",
-                    boxShadow: "0 6px 12px rgba(7, 20, 46, .08)",
-                    zIndex: "101",
                 }}>
-                    <div style={{
-                        padding: "24px",
-                        backgroundColor: "white",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
+                    <svg xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 24 24" style={{
+                        width: "18px",
+                        height: "18px",
+                        fill: "#253859",
                     }}>
-                        <h3 style={{
-                            margin: "0",
-                        }}>Besoin d'une pause ?</h3>
-                        <button style={{
-                            border: "none",
-                            cursor: "pointer",
-                            fontSize: "24px",
-                            padding: "0",
-                            backgroundColor: "#F4F5F7",
-                            aspectRatio: "1 / 1",
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "50%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }} onClick={() => {
-                            props.setIsOpen(false);
-                        }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 24 24" style={{
-                                width: "18px",
-                                height: "18px",
-                                fill: "#253859",
-                            }}>
-                                <path
-                                    d="m12 13.591-4.804 4.805a1.08 1.08 0 0 1-.796.316A1.08 1.08 0 0 1 5.287 17.6q0-.479.317-.796L10.41 12 5.604 7.196a1.08 1.08 0 0 1-.317-.796A1.08 1.08 0 0 1 6.4 5.288q.479 0 .796.316L12 10.41l4.804-4.805a1.08 1.08 0 0 1 .796-.316A1.08 1.08 0 0 1 18.712 6.4q0 .479-.316.796L13.59 12l4.805 4.804q.316.318.316.796a1.08 1.08 0 0 1-1.112 1.112 1.08 1.08 0 0 1-.796-.316z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div style={{
-                        padding: "24px",
-                        color: "#253859",
-                    }}>
-                        Votre progression est enregistrée localement sur ce navigateur. Vous pourrez reprendre
-                        automatiquement plus tard.
-                    </div>
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        padding: "0 24px 24px 24px",
-                        gap: "16px",
-                    }}>
-                        <button style={{
-                            backgroundColor: "#F4F5F7",
-                            borderColor: "rgb(69, 45, 157)",
-                            color: "rgb(69, 45, 157)",
-                        }} onClick={() => {
-                            props.setIsOpen(false);
-                        }}>
-                            Rester
-                        </button>
-                        <button onClick={() => {
-                            navigate("/");
-                        }}>
-                            Quitter
-                        </button>
-                    </div>
-                </div>
+                        <path
+                            d="m12 13.591-4.804 4.805a1.08 1.08 0 0 1-.796.316A1.08 1.08 0 0 1 5.287 17.6q0-.479.317-.796L10.41 12 5.604 7.196a1.08 1.08 0 0 1-.317-.796A1.08 1.08 0 0 1 6.4 5.288q.479 0 .796.316L12 10.41l4.804-4.805a1.08 1.08 0 0 1 .796-.316A1.08 1.08 0 0 1 18.712 6.4q0 .479-.316.796L13.59 12l4.805 4.804q.316.318.316.796a1.08 1.08 0 0 1-1.112 1.112 1.08 1.08 0 0 1-.796-.316z"/>
+                    </svg>
+                </button>
             </div>
-        )
-    )
+            <div style={{
+                padding: "24px",
+                color: "#253859",
+            }}>
+                Votre progression est enregistrée localement sur ce navigateur. Vous pourrez reprendre
+                automatiquement plus tard.
+            </div>
+            <div style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                padding: "0 24px 24px 24px",
+                gap: "16px",
+            }}>
+                <button style={{
+                    backgroundColor: "#F4F5F7",
+                    borderColor: "rgb(69, 45, 157)",
+                    color: "rgb(69, 45, 157)",
+                }} onClick={() => {
+                    props.setIsOpen(false);
+                }}>
+                    Rester
+                </button>
+                <button onClick={() => {
+                    navigate("/");
+                }}>
+                    Quitter
+                </button>
+            </div>
+        </Modal>
+    );
 }
 
 function HeaderInfo({assessmentId, progress}) {
@@ -161,7 +125,7 @@ function HeaderInfo({assessmentId, progress}) {
                         display: "flex",
                         gap: "8px",
                         alignItems: "center"
-                    }} onClick={async () => {
+                    }} onClick={() => {
                         setIsQuitPopupOpen(true);
                     }}>
                         <span>Quitter</span>
@@ -273,15 +237,7 @@ export function Assessment() {
 
     return (
         (isLoading || !currentAssessment) ? (
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-                width: "100%",
-            }}>
-                <img src={interwind} alt="En cours de chargement..."/>
-            </div>
+            <LoadingSpinner/>
         ) : (
             <BackgroundHeader height="270px" info={<HeaderInfo assessmentId={assessmentId} progress={progress}/>}>
                 <div style={{padding: "8px"}}>

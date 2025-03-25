@@ -31,6 +31,12 @@ cd ..
 echo "📦 Installing root dependencies..."
 npm install
 
+# Run database migrations
+echo "🔄 Running database migrations..."
+cd api
+npm run migrate
+cd ..
+
 echo "✅ Development environment setup complete!"
 echo "You can now run:"
 echo "  - npm run dev    to start all services in development mode"

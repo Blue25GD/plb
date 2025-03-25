@@ -5,13 +5,27 @@ import {AssessmentChallenge} from "./assessmentChallenge.js";
 export class Challenge extends Model {
     static table = 'challenges';
 
-    static async findRandomUnused(assessmentId) {
-        const challenge = await database.query(`SELECT * FROM ${Challenge.table} WHERE id NOT IN (SELECT challenge_id FROM ${AssessmentChallenge.table} WHERE assessment_id = ?) ORDER BY rand() LIMIT 1`, [assessmentId]);
+    static async findRandomUnused(assessmentId, competences = []) {
+        const competenceFilter = competences.length > 0 ? 'AND competence_id IN (?)' : '';
+        const params = [Challenge.table, AssessmentChallenge.table, assessmentId];
 
-        if (!challenge[0].length) {
+        if (competences.length > 0) {
+            params.push(competences);
+        }
+
+        const [challenges] = await database.query(
+            `SELECT *
+             FROM ? ?
+             WHERE id NOT IN (SELECT challenge_id FROM ? ? WHERE assessment_id = ?) ${competenceFilter}
+             ORDER BY RAND()
+             LIMIT 1`,
+            params
+        );
+
+        if (!challenges.length) {
             return null;
         }
 
-        return new this(challenge[0][0])
+        return new this(challenges[0]);
     }
 }

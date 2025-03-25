@@ -6,21 +6,28 @@ import {database} from "../db/database.js";
 
 export class Assessment extends Model {
     static table = 'assessments';
+    #competences;
+
+    constructor(attributes = {}) {
+        const {competences, ...dbAttributes} = attributes;
+        super(dbAttributes);
+        this.#competences = competences || [];
+    }
 
     async addRandomChallenge() {
-        const challenge = await Challenge.findRandomUnused(this.id)
+        const challenge = await Challenge.findRandomUnused(this.id, this.#competences);
 
         if (!challenge) {
-            return new Error('No challenges found')
+            return new Error('No challenges found');
         }
 
         const assessmentChallenge = new AssessmentChallenge({
             assessment_id: this.id,
             challenge_id: challenge.id
-        })
+        });
 
-        await assessmentChallenge.save()
-        return assessmentChallenge
+        await assessmentChallenge.save();
+        return assessmentChallenge;
     }
 
     async getCurrentChallenge() {
@@ -108,18 +115,28 @@ export class Assessment extends Model {
     }
 
     static async deleteOldAssessments() {
-        const assessmentIds = await database.query(`SELECT id
-                                                    FROM ${this.table}
-                                                    WHERE created_at < NOW() - INTERVAL ? SECOND`, [config.unsavedAssessmentTimeout])
-        if (!assessmentIds[0].length) {
-            return
+        const [assessmentIds] = await database.query(
+            `SELECT id
+             FROM ? ?
+             WHERE created_at < NOW() - INTERVAL ? SECOND`,
+            [this.table, config.unsavedAssessmentTimeout]
+        );
+
+        if (!assessmentIds.length) {
+            return;
         }
-        await database.query(`DELETE
-                              FROM ${AssessmentChallenge.table}
-                              WHERE assessment_id IN (?)`, [assessmentIds[0].map(assessment => assessment.id)])
-        await database.query(`DELETE
-                              FROM ${this.table}
-                              WHERE id IN (?)`, [assessmentIds[0].map(assessment => assessment.id)])
+
+        const ids = assessmentIds.map(assessment => assessment.id);
+
+        await database.query(
+            `DELETE FROM ?? WHERE assessment_id IN (?)`,
+            [AssessmentChallenge.table, ids]
+        );
+
+        await database.query(
+            `DELETE FROM ?? WHERE id IN (?)`,
+            [this.table, ids]
+        );
     }
 
     async saveAndReturnCode() {
@@ -146,5 +163,19 @@ export class Assessment extends Model {
             [code, this.id]
         );
         return code;
+    }
+
+    async delete() {
+        // First delete all associated assessment_challenges
+        await database.query(
+            `DELETE FROM ${AssessmentChallenge.table} WHERE assessment_id = ?`,
+            [this.id]
+        );
+
+        // Then delete the assessment itself
+        await database.query(
+            `DELETE FROM ${this.constructor.table} WHERE id = ?`,
+            [this.id]
+        );
     }
 }

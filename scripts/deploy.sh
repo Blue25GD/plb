@@ -215,7 +215,7 @@ EOF
 initialize_database() {
     log "Initialisation de la base de données..."
     
-    cd api && node bin/executeMigrations.js && cd ..
+    cd api && npm run migrate && cd ..
     if [ $? -ne 0 ]; then
         error "Échec de l'initialisation de la base de données."
         return 1

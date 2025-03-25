@@ -2,150 +2,92 @@ import {BackgroundHeader, fetchEndpoint} from "./Index.jsx";
 import macaronCertif from "../../public/macaron-certif.svg";
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
+import {Modal} from '../components/Modal';
+import {LoadingSpinner} from '../components/LoadingSpinner';
 import interwind from "../assets/interwind.gif";
 
 export function QuestionPreviewPopup(props) {
     const {challenge} = props;
 
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
-
     return (
-        <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            paddingTop: "40px",
-            paddingBottom: "40px",
-            position: "fixed",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(37, 56, 88, .5)",
-            transition: "all .3s ease-in-out",
-            zIndex: "100",
-            overflowY: "scroll",
-        }}>
+        <Modal isOpen={true} onClose={() => props.setPreviewChallenge(null)} maxWidth="988px">
             <div style={{
-                width: "100%",
-                height: "100%",
-                position: "fixed",
-                top: "0",
-                left: "0",
-                zIndex: "100",
-            }} onClick={() => {
-                props.setPreviewChallenge(null);
-            }}></div>
-
-            <div style={{
-                backgroundColor: "#F4F5F7",
-                width: "80%",
-                maxWidth: "988px",
-                overflowY: "auto",
-                borderRadius: "6px",
-                boxShadow: "0 6px 12px rgba(7, 20, 46, .08)",
-                zIndex: "101",
+                padding: "24px",
+                backgroundColor: "white",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
             }}>
+                <h2 style={{margin: 0}}>Question {challenge.order}</h2>
+                <button onClick={() => props.setPreviewChallenge(null)} style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer"
+                }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{
+                        width: "24px",
+                        height: "24px",
+                        fill: "#5E6C84"
+                    }}>
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <div style={{padding: "24px", display: "flex", flexDirection: "column", gap: "24px"}}>
                 <div style={{
-                    padding: "24px",
+                    padding: "16px",
                     backgroundColor: "white",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}>
-                    <h3 style={{
-                        margin: "0",
-                    }}>Vous avez la mauvaise réponse !</h3>
-                    <button style={{
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "24px",
-                        padding: "0",
-                        backgroundColor: "#F4F5F7",
-                        aspectRatio: "1 / 1",
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }} onClick={() => {
-                        props.setPreviewChallenge(null);
-                    }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 24 24" style={{
-                            width: "18px",
-                            height: "18px",
-                            fill: "#253859",
-                        }}>
-                            <path
-                                d="m12 13.591-4.804 4.805a1.08 1.08 0 0 1-.796.316A1.08 1.08 0 0 1 5.287 17.6q0-.479.317-.796L10.41 12 5.604 7.196a1.08 1.08 0 0 1-.317-.796A1.08 1.08 0 0 1 6.4 5.288q.479 0 .796.316L12 10.41l4.804-4.805a1.08 1.08 0 0 1 .796-.316A1.08 1.08 0 0 1 18.712 6.4q0 .479-.316.796L13.59 12l4.805 4.804q.316.318.316.796a1.08 1.08 0 0 1-1.112 1.112 1.08 1.08 0 0 1-.796-.316z"/>
-                        </svg>
-                    </button>
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
+                }} dangerouslySetInnerHTML={{__html: challenge.question}}>
                 </div>
-                <div style={{
-                    padding: "24px",
-                    display: "flex",
-                    gap: "24px",
-                    flexDirection: "column",
-                }}>
+                {challenge.image_url && (
                     <div style={{
                         padding: "16px",
                         backgroundColor: "white",
                         borderRadius: "8px",
                         boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
-                    }} dangerouslySetInnerHTML={{__html: challenge.question}}>
-                    </div>
-                    {challenge.image_url && (
-                        <div style={{
-                            padding: "16px",
-                            backgroundColor: "white",
-                            borderRadius: "8px",
-                            boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
-                        }}>
-                            {challenge.image_url.startsWith("<img") ? (
-                                <div dangerouslySetInnerHTML={{__html: challenge.image_url}}/>
-                            ) : (
-                                <img src={`/images/${challenge.image_url}`} alt="" style={{
-                                    maxWidth: "100%",
-                                    borderRadius: "8px",
-                                    marginBottom: "8px"
-                                }}/>
-                            )}
-                        </div>
-                    )}
-
-                    <div style={{
-                        padding: "16px",
-                        backgroundColor: "white",
-                        borderRadius: "8px",
-                        boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
-                        fontSize: "16px",
                     }}>
-                        {challenge.proposals.split("\n").map((proposal, index) => (
-                            <div key={index} style={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginBottom: index === challenge.proposals.split("\n").length - 1 ? 0 : "4px",
-                            }}>
-                                <input type="radio" id={index} name="proposal" style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    margin: 0,
-                                }} disabled checked={parseInt(challenge.solution) === index + 1}/>
-                                <label style={{
-                                    marginLeft: "8px",
-                                }} htmlFor={index} dangerouslySetInnerHTML={{__html: proposal}}></label>
-                            </div>
-                        ))}
+                        {challenge.image_url.startsWith("<img") ? (
+                            <div dangerouslySetInnerHTML={{__html: challenge.image_url}}/>
+                        ) : (
+                            <img src={`/images/${challenge.image_url}`} alt="" style={{
+                                maxWidth: "100%",
+                                borderRadius: "8px",
+                                marginBottom: "8px"
+                            }}/>
+                        )}
                     </div>
+                )}
+
+                <div style={{
+                    padding: "16px",
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
+                    fontSize: "16px",
+                }}>
+                    {challenge.proposals.split("\n").map((proposal, index) => (
+                        <div key={index} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginBottom: index === challenge.proposals.split("\n").length - 1 ? 0 : "4px",
+                        }}>
+                            <input type="radio" id={index} name="proposal" style={{
+                                width: "16px",
+                                height: "16px",
+                                margin: 0,
+                            }} disabled checked={parseInt(challenge.solution) === index + 1}/>
+                            <label style={{
+                                marginLeft: "8px",
+                            }} htmlFor={index} dangerouslySetInnerHTML={{__html: proposal}}></label>
+                        </div>
+                    ))}
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 }
 
@@ -153,9 +95,7 @@ export function Results() {
     const {assessmentId} = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [results, setResults] = useState(null);
-
     const [previewChallenge, setPreviewChallenge] = useState(null);
-
     const navigate = useNavigate();
 
     async function setup() {
@@ -170,15 +110,7 @@ export function Results() {
 
     return (
         (isLoading || !results) ? (
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-                width: "100%",
-            }}>
-                <img src={interwind} alt="En cours de chargement..."/>
-            </div>
+            <LoadingSpinner/>
         ) : (
             <div>
                 {previewChallenge &&

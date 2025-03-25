@@ -149,9 +149,9 @@ start_database() {
     for i in {1..12}; do
         if docker ps | grep -q "$DB_CONTAINER"; then
             log "Attente que la base de données soit prête ($i/12)..."
-            sleep 5
+            sleep 30
         else
-            error "Le conteneur de base de données n'est pas démarré après $((i*5)) secondes."
+            error "Le conteneur de base de données n'est pas démarré après $((i*30)) secondes."
             return 1
         fi
     done

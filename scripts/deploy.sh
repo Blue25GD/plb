@@ -148,7 +148,6 @@ start_database() {
     for i in {1..30}; do
         if ! docker ps | grep -q "$DB_CONTAINER"; then
             error "Le conteneur de base de données n'est pas démarré."
-            return 1
         fi
         
         # Tester si MySQL est prêt à accepter des connexions

@@ -9,7 +9,7 @@
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="deployment_${TIMESTAMP}.log"
 BACKUP_DIR="backups/${TIMESTAMP}"
-DB_CONTAINER="plb_db_1"
+DB_CONTAINER="plb-plb-db-1"
 API_SERVICE_NAME="plb-api"
 DEPLOYMENT_TYPE="full" # Options: full, frontend-only, backend-only, db-only
 

@@ -143,21 +143,26 @@ start_database() {
     
     # Attendre que la base de données soit prête
     log "Attente du démarrage de la base de données..."
-    sleep 30
     
     # Vérifier si le conteneur est démarré
-    for i in {1..12}; do
-        if docker ps | grep -q "$DB_CONTAINER"; then
-            log "Attente que la base de données soit prête ($i/12)..."
-            sleep 30
-        else
-            error "Le conteneur de base de données n'est pas démarré après $((i*30)) secondes."
+    for i in {1..30}; do
+        if ! docker ps | grep -q "$DB_CONTAINER"; then
+            error "Le conteneur de base de données n'est pas démarré."
             return 1
         fi
+        
+        # Tester si MySQL est prêt à accepter des connexions
+        if docker exec "$DB_CONTAINER" mysqladmin ping -h localhost --silent; then
+            success "Base de données démarrée et prête à accepter des connexions."
+            return 0
+        fi
+        
+        log "Attente que la base de données soit prête ($i/30)..."
+        sleep 5
     done
     
-    success "Base de données démarrée."
-    return 0
+    error "La base de données n'est pas prête après 150 secondes."
+    return 1
 }
 
 # Fonction pour installer les dépendances

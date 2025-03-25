@@ -26,6 +26,7 @@ frontend/
 │   ├── assets/      # Images, icônes et autres ressources
 │   ├── pages/       # Composants de pages principales
 │   │   ├── Index.jsx       # Page d'accueil
+│   │   ├── NewAssessment.jsx  # Page de configuration d'un nouveau test
 │   │   ├── Assessment.jsx  # Page de test/évaluation
 │   │   └── Results.jsx     # Page de résultats
 │   ├── App.css      # Styles globaux de l'application
@@ -40,8 +41,17 @@ frontend/
 ### Composants principaux
 
 - **Index.jsx** : Page d'accueil avec options pour commencer un nouveau test ou reprendre une session
+- **NewAssessment.jsx** : Page de configuration d'un nouveau test avec sélection des catégories et du nombre de questions
 - **Assessment.jsx** : Page principale du test avec affichage des questions, chronomètre et navigation
 - **Results.jsx** : Affichage des résultats et analyse des réponses
+
+### Styles et thèmes
+
+Le projet utilise un système de style moderne avec :
+- Polices personnalisées (Roboto, Nunito, JetBrains Mono)
+- Animations et transitions fluides
+- Design responsive avec support mobile
+- Thème cohérent avec des gradients et ombres
 
 ## Backend (Node.js/Fastify)
 
@@ -51,13 +61,17 @@ api/
 ├── config/          # Fichiers de configuration
 ├── controllers/     # Contrôleurs pour la logique métier
 │   ├── assessment.controller.js  # Gestion des tests
+│   ├── competence.controller.js  # Gestion des compétences
 │   └── session.controller.js     # Gestion des sessions
 ├── db/              # Configuration de la base de données
+│   ├── migrations/  # Migrations SQL pour la structure de la base
+│   └── seeds/      # Données initiales
 ├── middleware/      # Middleware pour les requêtes
 ├── models/          # Modèles pour l'accès aux données
 │   ├── assessment.js          # Modèle pour les tests
 │   ├── assessmentChallenge.js # Relation entre tests et questions
 │   ├── challenge.js           # Modèle pour les questions
+│   ├── competence.js          # Modèle pour les compétences
 │   ├── model.js               # Classe de base pour les modèles
 │   ├── session.js             # Modèle pour les sessions
 │   └── user.js                # Modèle pour les utilisateurs
@@ -107,10 +121,29 @@ api/
 
 ## Base de données
 
-La structure de la base de données est définie dans les modèles et inclut les tables suivantes :
+La structure de la base de données inclut les tables suivantes :
 
 - **users** : Informations sur les utilisateurs (anonymes)
 - **sessions** : Sessions utilisateur
 - **assessments** : Tests/évaluations
 - **challenges** : Questions individuelles
-- **assessment_challenges** : Association entre tests et questions 
+- **assessment_challenges** : Association entre tests et questions
+- **competences** : Catégories de compétences pour les questions
+
+### Migrations
+
+Le projet utilise un système de migrations SQL pour gérer la structure de la base de données. Les migrations sont exécutées automatiquement lors du déploiement et incluent :
+
+- Création des tables initiales
+- Ajout des relations entre les tables
+- Mise à jour des structures existantes
+- Insertion des données de base (compétences, etc.)
+
+## Sécurité
+
+Le projet implémente plusieurs mesures de sécurité :
+
+- Support CORS configuré via @fastify/cors
+- Sessions anonymes sécurisées
+- Validation des données entrantes
+- Protection contre les injections SQL via requêtes préparées 

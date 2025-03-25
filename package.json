@@ -1,0 +1,14 @@
+{
+  "name": "preparer-le-bia",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd api && npm run dev\" \"cd frontend && npm run dev\"",
+    "start": "./scripts/start-dev.sh",
+    "setup": "./scripts/setup-dev.sh",
+    "deploy": "./scripts/deploy.sh"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 

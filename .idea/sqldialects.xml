@@ -12,5 +12,6 @@
     <file url="file://$PROJECT_DIR$/api/db/migrations/20250312_182544_insert_competences.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/api/db/migrations/20250314_180156_update_assessments_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/api/db/migrations/20250316_113459_update_assessments_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/api/db/migrations/20250319_182833_add_2020_to_1996_questions.sql" dialect="MySQL" />
   </component>
 </project>

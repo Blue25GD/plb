@@ -25,7 +25,10 @@ Oui, l'application est entièrement gratuite et le restera. Elle est développé
 
 ### Comment commencer un test ?
 
-Sur la page d'accueil, cliquez sur le bouton "Commencer un nouveau test". Un test sera généré automatiquement avec des questions aléatoires issues de notre base de données.
+Sur la page d'accueil, cliquez sur le bouton "Commencer un nouveau test". Vous pourrez alors :
+1. Sélectionner les catégories de questions souhaitées
+2. Choisir le nombre de questions pour votre test
+3. Lancer le test avec votre configuration personnalisée
 
 ### Puis-je reprendre un test commencé plus tard ?
 
@@ -51,15 +54,29 @@ Non, aucune inscription n'est nécessaire. L'application utilise des sessions an
 
 Oui, l'application est conçue avec une interface responsive qui s'adapte aux écrans des smartphones et tablettes.
 
+### Puis-je choisir les types de questions ?
+
+Oui, lors de la création d'un nouveau test, vous pouvez sélectionner une ou plusieurs catégories parmi :
+1. Météorologie et aérologie
+2. Aérodynamique, aérostatique et principes du vol
+3. Étude des aéronefs
+4. Navigation, réglementation, sécurité des vols
+5. Histoire et culture de l'aéronautique et du spatial
+
+### Combien de questions puis-je avoir par test ?
+
+Vous pouvez personnaliser le nombre de questions lors de la création du test. Le système s'assure que les questions sont équitablement réparties entre les catégories sélectionnées.
+
 ## Questions Techniques
 
 ### Quelles technologies sont utilisées ?
 
 L'application utilise :
-- React avec Vite pour le frontend
-- Node.js avec Fastify pour le backend
-- Une base de données SQL pour stocker les questions et sessions
-- Docker pour faciliter le déploiement
+- React 19.0.0 avec Vite 6.2.0 pour le frontend
+- Node.js avec Fastify 5.2.1 pour le backend
+- MySQL pour la base de données
+- Docker pour la conteneurisation
+- ESLint 9.22.0 pour la qualité du code
 
 ### Comment puis-je déployer ma propre instance de l'application ?
 
@@ -78,6 +95,22 @@ Consultez notre [guide de contribution](./contributing.md) pour plus d'informati
 ### Y a-t-il un API public ?
 
 L'API n'est pas spécifiquement conçue pour un usage public, mais vous pouvez explorer la [documentation de l'API](./api-reference.md) si vous souhaitez l'utiliser pour des développements personnels.
+
+### L'application fonctionne-t-elle hors ligne ?
+
+Non, l'application nécessite une connexion internet pour :
+- Charger les questions depuis le serveur
+- Sauvegarder la progression
+- Soumettre les réponses
+- Récupérer les résultats
+
+### Comment les données sont-elles sécurisées ?
+
+L'application utilise plusieurs mesures de sécurité :
+- Sessions anonymes cryptées
+- Protection CORS pour l'API
+- Requêtes préparées pour la base de données
+- Validation des données entrantes
 
 ## Contenu et Questions
 

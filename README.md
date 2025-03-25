@@ -33,23 +33,23 @@ Le projet dispose d'un script de déploiement qui automatise toute l'installatio
 git clone https://github.com/Blue25GD/plb.git
 cd plb
 
-# Rendre le script exécutable
-chmod +x deploy.sh
+# Rendre les scripts exécutables
+chmod +x scripts/*.sh
 
 # Lancer le script de déploiement (installation complète)
-./deploy.sh
+npm run deploy
 ```
 
 Vous pouvez personnaliser le déploiement avec différentes options :
 ```bash
 # Voir toutes les options disponibles
-./deploy.sh --help
+npm run deploy -- --help
 
 # Déployer uniquement le frontend
-./deploy.sh --type frontend-only
+npm run deploy -- --type frontend-only
 
 # Créer une sauvegarde avant le déploiement
-./deploy.sh --backup
+npm run deploy -- --backup
 ```
 
 ### Méthode 2 : Installation manuelle
@@ -68,8 +68,7 @@ cp sample.env .env
 docker-compose up -d
 
 # Installation des dépendances
-cd api && npm install && cd ..
-cd frontend && npm install && cd ..
+npm install
 
 # Initialiser la base de données
 cd api && node bin/executeMigrations.js && cd ..
@@ -81,16 +80,45 @@ cd api && npm start
 cd frontend && npm run dev
 ```
 
+## 🛠️ Développement
+
+Pour le développement, nous avons mis en place des scripts npm qui simplifient la configuration et le lancement de l'environnement de développement :
+
+```bash
+# Configuration initiale de l'environnement de développement
+npm run setup
+
+# Lancer tous les services en mode développement
+npm run dev
+
+# Lancer tous les services en mode production
+npm run start
+```
+
+Les scripts npm disponibles sont :
+- `npm run setup` : Configure l'environnement de développement (Docker, dépendances, etc.)
+- `npm run dev` : Lance tous les services en mode développement
+- `npm run start` : Lance tous les services en mode production
+- `npm run deploy` : Script de déploiement en production
+
 ## 🛠️ Stack Technique
 
 **Client:** 
-- [React](https://react.dev/) avec [Vite](https://vite.dev/)
-- CSS moderne avec des animations fluides
+- [React](https://react.dev/) (v19.0.0) avec [Vite](https://vite.dev/) (v6.2.0)
+- CSS moderne avec des animations fluides et des transitions personnalisées
+- Interface responsive avec support mobile complet
+- Support des polices Roboto, Nunito et JetBrains Mono
 
 **Serveur:** 
 - [Node.js](https://nodejs.org/)
-- [Fastify](https://fastify.dev/)
-- Base de données SQL
+- [Fastify](https://fastify.dev/) (v5.2.1)
+- Base de données MySQL avec migrations automatisées
+- Support CORS avec @fastify/cors
+
+**Outils de développement:**
+- ESLint v9.22.0 avec support TypeScript
+- Docker et Docker Compose pour la base de données
+- Scripts de déploiement automatisés
 
 ## 📚 Documentation
 

@@ -25,7 +25,7 @@ export const createAssessment = async (req, reply) => {
     });
     await assessment.save();
 
-    const numberOfChallenges = 100; // TODO: Consider making this configurable
+    const numberOfChallenges = 10; // TODO: Consider making this configurable
     let challenges = [];
     for (let i = 0; i < numberOfChallenges; i++) {
         const challenge = await assessment.addRandomChallenge();

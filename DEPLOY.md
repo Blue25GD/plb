@@ -11,7 +11,31 @@ Deploying is done to a Ubuntu 24.04 server.
 - Docker + Docker compose installed on the server (latest version)
 - Apache2 installed
 
-## Deployment
+## Development Setup
+
+For local development, you can use the provided npm scripts to quickly set up your environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/Blue25GD/plb.git && cd plb
+
+# Make scripts executable
+chmod +x scripts/*.sh
+
+# Setup development environment
+npm run setup
+
+# Start all services in development mode
+npm run dev
+```
+
+This will:
+1. Start Docker services
+2. Install all dependencies (root, API, and frontend)
+3. Set up the development environment
+4. Start both the API and frontend in development mode
+
+## Production Deployment
 
 1. Clone the repository on the server
 
@@ -40,7 +64,7 @@ const config = {
 export {config};
 ```
 
-The following can all be done using the `deploy.sh` script, all up to the 6th step.
+The following can all be done using the `npm run deploy` command, all up to the 6th step.
 
 ---
 
@@ -53,8 +77,7 @@ docker-compose up -d
 3. Install dependencies
 
 ```bash
-cd api && npm install && cd ..
-cd frontend && npm install && cd ..
+npm install
 ```
 
 4. Build the client

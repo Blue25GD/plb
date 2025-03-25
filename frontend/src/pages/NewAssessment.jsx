@@ -23,7 +23,6 @@ export function NewAssessment() {
                 console.error("Error fetching categories:", error);
             }
         }
-
         fetchCategories();
     }, []);
 

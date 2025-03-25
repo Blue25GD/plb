@@ -17,9 +17,7 @@ export class Model {
     }
 
     static async findBy(attribute, value) {
-        const query = `SELECT *
-                       FROM ? ?
-                       WHERE ?? = ?`;
+        const query = `SELECT * FROM ?? WHERE ?? = ?`;
         const [rows] = await database.query(query, [this.table, attribute, value]);
         return rows.length ? rows.map(row => new this(row)) : null;
     }

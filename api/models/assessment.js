@@ -117,7 +117,7 @@ export class Assessment extends Model {
     static async deleteOldAssessments() {
         const [assessmentIds] = await database.query(
             `SELECT id
-             FROM ? ?
+             FROM ??
              WHERE created_at < NOW() - INTERVAL ? SECOND`,
             [this.table, config.unsavedAssessmentTimeout]
         );

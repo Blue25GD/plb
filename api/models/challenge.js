@@ -15,8 +15,8 @@ export class Challenge extends Model {
 
         const [challenges] = await database.query(
             `SELECT *
-             FROM ? ?
-             WHERE id NOT IN (SELECT challenge_id FROM ? ? WHERE assessment_id = ?) ${competenceFilter}
+             FROM ??
+             WHERE id NOT IN (SELECT challenge_id FROM ?? WHERE assessment_id = ?) ${competenceFilter}
              ORDER BY RAND()
              LIMIT 1`,
             params

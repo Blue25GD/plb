@@ -143,7 +143,7 @@ start_database() {
     
     # Attendre que la base de données soit prête
     log "Attente du démarrage de la base de données..."
-    sleep 5
+    sleep 30
     
     # Vérifier si le conteneur est démarré
     for i in {1..12}; do

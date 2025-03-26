@@ -1,10 +1,11 @@
-import {BackgroundHeader, fetchEndpoint} from "./Index.jsx";
+import {fetchEndpoint} from "./Index.jsx";
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import interwind from "../assets/interwind.gif";
 import {useNavigate} from "react-router";
 import {Modal} from '../components/Modal';
 import {LoadingSpinner} from '../components/LoadingSpinner';
+import {BackgroundHeader} from "../components/BackgroundHeader.jsx";
 
 async function getCurrentAssessment(id) {
     return await fetchEndpoint(`/assessments/${id}`, "GET");
@@ -147,7 +148,7 @@ function HeaderInfo({assessmentId, progress}) {
                     height: "100%",
                 }}>
                     {renderInfo("ÉPREUVE N°", assessmentId, "24px")}
-                    {renderInfo("QUESTION", `${progress.answeredChallenges}/${progress.totalChallenges}`, "32px")}
+                    {renderInfo("QUESTION", `${progress.answeredChallenges + 1}/${progress.totalChallenges}`, "32px")}
                 </div>
             </div>
         </>
@@ -173,6 +174,8 @@ export function Assessment() {
         totalChallenges: 0
     });
 
+    const [challengeId, setChallengeId] = useState(null);
+
     async function setup() {
         document.querySelectorAll('input[name="answer"]').forEach(radio => radio.checked = false);
 
@@ -188,6 +191,8 @@ export function Assessment() {
         setOptions(optionsSplit)
 
         setQuestion(currentAssessment.currentChallenge.question)
+
+        setChallengeId(currentAssessment.currentChallenge.id)
 
         setProgress(currentAssessment.progress)
 
@@ -234,12 +239,26 @@ export function Assessment() {
             });
     }
 
+    function previousChallenge() {
+        setIsLoading(true);
+        setIsBadAnswerError(false);
+        fetchEndpoint(`/assessments/${assessmentId}/prev`, "POST", {})
+            .then((r) => {
+                if (r.is_done) {
+                    navigate(`/results/${assessmentId}`)
+                } else {
+                    setup().then()
+                }
+            });
+    }
+
 
     return (
         (isLoading || !currentAssessment) ? (
             <LoadingSpinner/>
         ) : (
-            <BackgroundHeader height="270px" info={<HeaderInfo assessmentId={assessmentId} progress={progress}/>}>
+            <BackgroundHeader showReportButton={true} challengeId={challengeId} height="270px"
+                              info={<HeaderInfo assessmentId={assessmentId} progress={progress}/>}>
                 <div style={{padding: "8px"}}>
                     <div style={{
                         width: "100%",
@@ -347,10 +366,25 @@ export function Assessment() {
                             background: "rgb(244, 245, 247)",
                             borderColor: "#442D9D",
                             color: "#442D9D",
+                            stroke: "#442D9D",
+                            display: "flex",
+                            alignItems: "center",
                         }} onClick={skipChallenge}>
                             Je passe
                         </button>
-                        <button onClick={submitAnswer}>Je valide</button>
+                        <button onClick={submitAnswer} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            justifyContent: "center",
+                        }}>
+                            Je valide
+                            <svg width="18px" height="18px" viewBox="0 0 20 20" fill="#fff"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#fff" stroke-width="2"
+                                      stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </BackgroundHeader>

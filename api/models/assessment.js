@@ -14,8 +14,8 @@ export class Assessment extends Model {
         this.#competences = competences || [];
     }
 
-    async addRandomChallenge() {
-        const challenge = await Challenge.findRandomUnused(this.id, this.#competences);
+    async addRandomChallenge(useNewProgram = true) {
+        const challenge = await Challenge.findRandomUnused(this.id, this.#competences, useNewProgram);
 
         if (!challenge) {
             return new Error('No challenges found');
@@ -47,6 +47,7 @@ export class Assessment extends Model {
         if (currentChallenge.attributes.solution === answer) {
             joinChallenge.attributes.is_correct = true
         }
+        joinChallenge.attributes.answer_given = answer
         await joinChallenge.save()
 
         return this._getNextChallenge()
@@ -101,7 +102,8 @@ export class Assessment extends Model {
                     question: challenge.attributes.question,
                     proposals: challenge.attributes.proposals,
                     solution: challenge.attributes.solution,
-                    image_url: challenge.attributes.image_url
+                    image_url: challenge.attributes.image_url,
+                    answerGiven: joinChallenge.attributes.answer_given
                 }
             })
         )

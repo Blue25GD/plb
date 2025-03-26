@@ -1,3 +1,6 @@
+alter table challenges
+    alter column year set default (2022);
+
 INSERT INTO challenges (question, proposals, solution, image_url, competence_id, created_at)
 VALUES ('Un front occlus est représenté sur les cartes météorologiques par :',
         'une ligne avec des demi-cercles accolés à elle.

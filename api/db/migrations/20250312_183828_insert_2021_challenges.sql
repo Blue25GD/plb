@@ -1,3 +1,6 @@
+alter table challenges
+    alter column year set default (2021);
+
 INSERT INTO challenges (question, proposals, solution, image_url, competence_id, created_at)
 VALUES ('Dans le secteur de la zone 2 sur la carte en illustration on peut dire que',
         'le gradient horizontal de pression est faible.

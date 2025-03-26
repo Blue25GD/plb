@@ -25,42 +25,6 @@ h1, h2, h3, h4, h5, h6 {
     box-sizing: border-box;
 }
 
-.background-header {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.background-header-background {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-    width: 100%;
-    height: 270px;
-    color: #fff;
-    background: linear-gradient(91.59deg, #52d987 0%, #1a8c89 100%);
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
-}
-
-.background-header-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 90%;
-    max-width: 990px;
-    min-height: 230px;
-}
-
-.background-header-content {
-    width: 90%; /* Makes the width flexible based on the window */
-    max-width: 990px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
-    color: rgb(37, 56, 88);
-    font-size: 18px;
-}
 
 button:not(.btn) {
     background: rgb(28, 130, 93);
@@ -163,4 +127,47 @@ code {
     transition: height 0.2s cubic-bezier(0.265, 0.075, 0.025, 0.99);
     -webkit-transition: all 0.2s cubic-bezier(0.265, 0.075, 0.025, 0.99);
     z-index: 1;
+}
+
+.flag-btn:hover {
+    color: rgb(180, 83, 9) !important;
+}
+
+.flag-btn:hover svg {
+    fill: rgb(180, 83, 9) !important;
+}
+
+/* Custom radio button styles */
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #442D9D;
+    border-radius: 50%;
+    margin: 0;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+input[type="radio"]:checked {
+    border-color: #442D9D;
+}
+
+input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #442D9D;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(68, 45, 157, 0.2);
 }

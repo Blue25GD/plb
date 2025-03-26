@@ -1,10 +1,11 @@
-import {BackgroundHeader, fetchEndpoint} from "./Index.jsx";
+import {fetchEndpoint} from "./Index.jsx";
 import macaronCertif from "../../public/macaron-certif.svg";
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import {Modal} from '../components/Modal';
 import {LoadingSpinner} from '../components/LoadingSpinner';
 import interwind from "../assets/interwind.gif";
+import {BackgroundHeader} from "../components/BackgroundHeader.jsx";
 
 export function QuestionPreviewPopup(props) {
     const {challenge} = props;
@@ -18,7 +19,7 @@ export function QuestionPreviewPopup(props) {
                 justifyContent: "space-between",
                 alignItems: "center",
             }}>
-                <h2 style={{margin: 0}}>Question {challenge.order}</h2>
+                <h2 style={{margin: 0}}>Corrigé</h2>
                 <button onClick={() => props.setPreviewChallenge(null)} style={{
                     background: "none",
                     border: "none",
@@ -49,6 +50,7 @@ export function QuestionPreviewPopup(props) {
                         backgroundColor: "white",
                         borderRadius: "8px",
                         boxShadow: "0 2px 5px 0 rgba(0,0,0,.05)",
+                        textAlign: "center",
                     }}>
                         {challenge.image_url.startsWith("<img") ? (
                             <div dangerouslySetInnerHTML={{__html: challenge.image_url}}/>
@@ -82,6 +84,9 @@ export function QuestionPreviewPopup(props) {
                             }} disabled checked={parseInt(challenge.solution) === index + 1}/>
                             <label style={{
                                 marginLeft: "8px",
+                                textDecoration: parseInt(challenge.answerGiven) === index + 1 ? "line-through" : "none",
+                                fontWeight: parseInt(challenge.solution) === index + 1 ? "bold" : "normal",
+                                color: parseInt(challenge.solution) === index + 1 ? "green" : "black",
                             }} htmlFor={index} dangerouslySetInnerHTML={{__html: proposal}}></label>
                         </div>
                     ))}
@@ -186,7 +191,7 @@ export function Results() {
                             borderTop: "2px solid #e9ecef",
                         }}/>
                         <h2>Résultats:</h2>
-                        <h3>Questions fausses</h3>
+                        <h3>Réponses fausses</h3>
                         <ul style={{
                             listStyleType: "none",
                             padding: "0",

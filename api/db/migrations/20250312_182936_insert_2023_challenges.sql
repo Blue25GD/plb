@@ -1,3 +1,8 @@
+# set the default year to 2023
+alter table challenges
+    alter column year set default (2023);
+
+
 INSERT INTO challenges (question, proposals, solution, image_url, competence_id, created_at)
 VALUES ('Sur une carte de pressions telle que ci-dessous, quelle est l’affirmation exacte :',
         'les isobares donnent une indication sur la force et la direction du vent en altitude.

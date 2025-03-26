@@ -1,0 +1,121 @@
+.assessment-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90%;
+    max-width: 990px;
+    margin-top: 18px;
+}
+
+.assessment-card {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+.assessment-number {
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: 500;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
+
+.assessment-status {
+    margin: 0;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.progress-ring {
+    background: #fff;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    margin-top: 60px;
+    transition: all 0.2s cubic-bezier(0.265, 0.075, 0.025, 0.99);
+}
+
+.progress-ring.completed {
+    background: url(../assets/scorecard-congrats.svg);
+    background-size: cover;
+    background-position: center;
+    width: 140px;
+    height: 140px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.progress-ring-inner {
+    background: #fff;
+    border-radius: 50%;
+    width: 108px;
+    height: 108px;
+    z-index: 3;
+    position: absolute;
+    margin-top: 6px;
+    margin-left: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.progress-number {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 0;
+    border-bottom: 1px solid #CDD1D9;
+    margin-bottom: 4px;
+}
+
+.progress-total {
+    color: #5E6C84;
+    font-size: 0.9rem;
+}
+
+.progress-completed {
+    color: #fff;
+    border-bottom: 2px solid #fff;
+    margin: 0;
+}
+
+.progress-completed-total {
+    color: #fff;
+    font-weight: 500;
+}
+
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #FF4D4F;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.265, 0.075, 0.025, 0.99);
+    opacity: 0;
+    transform: scale(0.8);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.delete-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+} 

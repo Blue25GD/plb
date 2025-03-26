@@ -1,30 +1,11 @@
 import '../app.css'
 import {config} from "../config.js";
 import {useNavigate} from "react-router";
-import interwind from "../assets/interwind.gif";
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import scorecardCongrats from "../assets/scorecard-congrats.svg";
 import {Modal} from '../components/Modal';
 import {LoadingSpinner} from '../components/LoadingSpinner';
-
-export function BackgroundHeader(props) {
-    const {height} = props;
-
-    return <div className="background-header">
-        <div className="background-header-background" style={{
-            height: height
-        }}>
-            <div className="background-header-info" style={{
-                minHeight: `calc(${height} - 50px)`
-            }}>
-                {props.info}
-            </div>
-            <div className="background-header-content">
-                {props.children}
-            </div>
-        </div>
-    </div>;
-}
+import {BackgroundHeader} from "../components/BackgroundHeader.jsx";
 
 export async function fetchEndpoint(endpoint, method, body = {}) {
     const response = await fetch(config.api_url + endpoint, {
@@ -369,7 +350,7 @@ function App() {
                                                                 borderBottom: "1px solid #CDD1D9",
                                                                 marginBottom: "4px",
                                                             }}>
-                                                                {assessment.progress.answeredChallenges}
+                                                                {assessment.progress.answeredChallenges + 1}
                                                             </h1>
                                                             <span style={{
                                                                 color: "#5E6C84",
@@ -379,7 +360,7 @@ function App() {
                                                         </span>
                                                         </div>
                                                         <div style={{
-                                                            background: `conic-gradient(#51D987 ${(assessment.progress.answeredChallenges / assessment.progress.totalChallenges) * 100}%, 0, #CDD1D9 ${(assessment.progress.answeredChallenges / assessment.progress.totalChallenges) * 100}%)`,
+                                                            background: `conic-gradient(#51D987 ${((assessment.progress.answeredChallenges + 1) / assessment.progress.totalChallenges) * 100}%, 0, #CDD1D9 ${(assessment.progress.answeredChallenges / assessment.progress.totalChallenges) * 100}%)`,
                                                             width: "120px",
                                                             height: "120px",
                                                             zIndex: "2",

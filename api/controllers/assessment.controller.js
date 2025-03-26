@@ -25,7 +25,11 @@ const getAssessmentById = async (req, reply) => {
 export const createAssessment = async (req, reply) => {
     await Assessment.deleteOldAssessments();
 
-    const {numberOfQuestions = 10, categories = []} = req.body;
+    const {numberOfQuestions = 10, categories = [], useNewProgram = true} = req.body;
+
+    if (categories.length === 0) {
+        return missingParams(reply, {categories});
+    }
 
     const assessment = new Assessment({
         user_id: req.user.attributes.id,
@@ -35,7 +39,7 @@ export const createAssessment = async (req, reply) => {
 
     let challenges = [];
     for (let i = 0; i < numberOfQuestions; i++) {
-        const challenge = await assessment.addRandomChallenge();
+        const challenge = await assessment.addRandomChallenge(useNewProgram);
         if (challenge instanceof Error) {
             console.log(challenge.message);
             break;

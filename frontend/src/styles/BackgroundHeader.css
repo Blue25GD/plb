@@ -1,0 +1,87 @@
+
+.background-header {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.background-header-background {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    width: 100%;
+    height: 270px;
+    color: #fff;
+    background: linear-gradient(91.59deg, #52d987 0%, #1a8c89 100%);
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.background-header-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 990px;
+    min-height: 230px;
+}
+
+.background-header-content {
+    width: 90%; /* Makes the width flexible based on the window */
+    max-width: 990px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
+    color: rgb(37, 56, 88);
+    font-size: 18px;
+}
+
+.report-button-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: start;
+    width: 90%;
+    max-width: 990px;
+    margin-top: 18px;
+    color: rgb(37, 56, 88);
+}
+
+.flag-btn {
+    background: none;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: none;
+    font-size: 14px;
+    color: rgb(37, 56, 88);
+    cursor: pointer;
+}
+
+.report-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 18px;
+    color: rgb(37, 56, 88);
+    align-items: start;
+}
+
+.report-textarea {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100px;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 12px;
+}
+
+.report-form-submit {
+    margin-top: 10px;
+}
+
+.report-form-notice {
+    font-size: 12px;
+    color: rgb(94, 108, 132);
+}

@@ -1,6 +1,7 @@
-import {BackgroundHeader, fetchEndpoint} from "./Index.jsx";
+import {fetchEndpoint} from "./Index.jsx";
 import {useNavigate} from "react-router";
 import {useState, useEffect} from "react";
+import {BackgroundHeader} from "../components/BackgroundHeader.jsx";
 
 export function NewAssessment() {
     const navigate = useNavigate();
@@ -9,6 +10,23 @@ export function NewAssessment() {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [numberOfQuestions, setNumberOfQuestions] = useState(10);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [useNewProgram, setUseNewProgram] = useState(true);
+
+    useEffect(() => {
+        // Add tooltip hover functionality
+        const tooltip = document.querySelector('.tooltip');
+        const tooltipContainer = tooltip?.parentElement;
+        
+        if (tooltipContainer) {
+            tooltipContainer.addEventListener('mouseenter', () => {
+                tooltip.style.display = 'block';
+            });
+            
+            tooltipContainer.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        }
+    }, []);
 
     useEffect(() => {
         async function fetchCategories() {
@@ -30,7 +48,8 @@ export function NewAssessment() {
         setIsLoading(true);
         const json = await fetchEndpoint("/assessments", "POST", {
             categories: selectedCategories,
-            numberOfQuestions
+            numberOfQuestions,
+            useNewProgram
         });
         navigate(`/assessments/${json.id}`);
     }
@@ -47,6 +66,44 @@ export function NewAssessment() {
 
     return (
         <BackgroundHeader height="170px" info={<>Préparer le BIA</>}>
+            <style>
+                {`
+                    .tooltip {
+                        position: absolute;
+                        bottom: 100%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-color: rgba(0, 0, 0, 0.8);
+                        color: white;
+                        padding: 8px 12px;
+                        border-radius: 4px;
+                        font-size: 14px;
+                        max-width: 300px;
+                        width: max-content;
+                        z-index: 1000;
+                        display: none;
+                        margin-bottom: 8px;
+                        white-space: normal;
+                        text-align: left;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    }
+
+                    @media (max-width: 768px) {
+                        .tooltip {
+                            position: fixed;
+                            bottom: auto;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 90%;
+                            max-width: 320px;
+                            margin: 0;
+                            text-align: center;
+                            padding: 16px;
+                        }
+                    }
+                `}
+            </style>
             <div style={{
                 padding: "24px"
             }}>
@@ -185,6 +242,82 @@ export function NewAssessment() {
                                 Veuillez sélectionner au moins une catégorie
                             </div>
                         )}
+                    </div>
+
+                    <div style={{
+                        marginBottom: "32px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        position: "relative"
+                    }}>
+                        <label style={{
+                            color: "rgb(94, 108, 132)",
+                            fontWeight: "500",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "12px",
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            userSelect: "none"
+                        }}>
+                            <div style={{
+                                position: "relative",
+                                width: "20px",
+                                height: "20px",
+                                border: "2px solid #CDD1D9",
+                                borderRadius: "4px",
+                                backgroundColor: useNewProgram ? "rgb(28, 130, 93)" : "white",
+                                transition: "all 0.2s ease",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                <input
+                                    type="checkbox"
+                                    checked={useNewProgram}
+                                    onChange={(e) => setUseNewProgram(e.target.checked)}
+                                    style={{
+                                        position: "absolute",
+                                        opacity: 0,
+                                        cursor: "pointer",
+                                        height: 0,
+                                        width: 0
+                                    }}
+                                />
+                                {useNewProgram && (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        style={{
+                                            width: "14px",
+                                            height: "14px",
+                                            fill: "white"
+                                        }}
+                                    >
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                    </svg>
+                                )}
+                            </div>
+                            Utiliser uniquement des questions du nouveau programme
+                        </label>
+                        <div style={{
+                            position: "relative",
+                            display: "inline-block",
+                            marginTop: "2px"
+                        }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{
+                                width: "16px",
+                                height: "16px",
+                                fill: "rgb(94, 108, 132)",
+                                cursor: "help"
+                            }}>
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                            </svg>
+                            <div className="tooltip">
+                                Depuis la réforme de 2015, le programme du BIA a été mis à jour avec de nouvelles thématiques et un référentiel clarifié. Seules les questions issues des examens depuis 2015 sont utilisées, garantissant leur conformité avec le programme actuel.
+                            </div>
+                        </div>
                     </div>
 
                     <div style={{

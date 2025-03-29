@@ -322,7 +322,8 @@ VALUES ('Pour réaliser une mise en virage, on incline l’appareil en roulis. I
         2,
         CURRENT_TIMESTAMP);
 INSERT INTO challenges (question, proposals, solution, image_url, competence_id, created_at)
-VALUES ('Comment le pilote peut-il corriger ce phénomène (2.11) ?',
+VALUES ('Pour réaliser une mise en virage, on incline l’appareil en roulis. Il apparaît alors une
+rotation en lacet dans le sens opposé au sens du virage désiré. Comment le pilote peut-il corriger ce phénomène ?',
         'par une action sur le palonnier.
         par une action à cabrer sur le manche.
         par une action à piquer sur le manche.

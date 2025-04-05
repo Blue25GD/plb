@@ -188,7 +188,7 @@ export function NewAssessment() {
                                     onClick={() => toggleCategory(category.id)}
                                     style={{
                                         background: selectedCategories.includes(category.id)
-                                            ? "rgb(28, 130, 93)"
+                                            ? "var(--primary)"
                                             : "white",
                                         color: selectedCategories.includes(category.id)
                                             ? "white"
@@ -267,7 +267,7 @@ export function NewAssessment() {
                                 height: "20px",
                                 border: "2px solid #CDD1D9",
                                 borderRadius: "4px",
-                                backgroundColor: useNewProgram ? "rgb(28, 130, 93)" : "white",
+                                backgroundColor: useNewProgram ? "var(--primary)" : "white",
                                 transition: "all 0.2s ease",
                                 display: "flex",
                                 alignItems: "center",
@@ -379,7 +379,7 @@ export function NewAssessment() {
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{
                                 width: "24px",
                                 height: "24px",
-                                fill: "rgb(28, 130, 93)",
+                                fill: "var(--primary)",
                                 flexShrink: 0
                             }}>
                                 <path
@@ -403,7 +403,7 @@ export function NewAssessment() {
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{
                                 width: "24px",
                                 height: "24px",
-                                fill: "rgb(28, 130, 93)",
+                                fill: "var(--primary)",
                                 flexShrink: 0
                             }}>
                                 <path
@@ -419,7 +419,7 @@ export function NewAssessment() {
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style={{
                                 width: "24px",
                                 height: "24px",
-                                fill: "rgb(28, 130, 93)",
+                                fill: "var(--primary)",
                                 flexShrink: 0
                             }}>
                                 <path

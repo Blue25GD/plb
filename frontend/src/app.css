@@ -1,6 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+    /*--primary: #613fdd;*/
+    --primary: #1c825d;
+    /*--primary-2: #12a3ff;*/
+    --primary-2: #52d987;
+    /*--main-gradient: linear-gradient(180deg, #3d68ff 0%, #12a3ff 100%);*/
+    --main-gradient: linear-gradient(91.59deg, #52d987 0%, #1a8c89 100%);
+    --header-gradient: linear-gradient(91.59deg, #52d987 0%, #1a8c89 100%);
+    /*--header-gradient: linear-gradient(91.59deg, #3d68ff 0%, #8845ff 100%);*/
+}
 
 body {
     font-size: 18px;
@@ -27,12 +35,12 @@ h1, h2, h3, h4, h5, h6 {
 
 
 button:not(.btn) {
-    background: rgb(28, 130, 93);
+    background: var(--primary);
     border-radius: 999px;
     color: white;
     padding: 12px 28px;
     font-size: 15px;
-    border: 2px solid rgb(28, 130, 93);
+    border: 2px solid var(--primary);
     cursor: pointer;
     font-weight: 700;
 }
@@ -113,7 +121,8 @@ code {
 }
 
 .article-card::after {
-    background: radial-gradient(rgb(26, 140, 137) 25%, rgb(82, 217, 135) 100%);
+    /*background: radial-gradient(rgb(26, 140, 137) 25%, rgb(82, 217, 135) 100%);*/
+    background: var(--main-gradient);
     content: '';
     position: absolute;
     top: -330px;

@@ -360,7 +360,7 @@ function App() {
                                                         </span>
                                                         </div>
                                                         <div style={{
-                                                            background: `conic-gradient(#51D987 ${((assessment.progress.answeredChallenges + 1) / assessment.progress.totalChallenges) * 100}%, 0, #CDD1D9 ${(assessment.progress.answeredChallenges / assessment.progress.totalChallenges) * 100}%)`,
+                                                            background: `conic-gradient(var(--primary-2) ${((assessment.progress.answeredChallenges + 1) / assessment.progress.totalChallenges) * 100}%, 0, #CDD1D9 ${(assessment.progress.answeredChallenges / assessment.progress.totalChallenges) * 100}%)`,
                                                             width: "120px",
                                                             height: "120px",
                                                             zIndex: "2",
